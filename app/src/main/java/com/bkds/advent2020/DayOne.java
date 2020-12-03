@@ -6,60 +6,109 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class DayOne extends DayBase {
+public class DayOne extends DayBase
+{
 
-	private List<Integer> expenses = new ArrayList<>();
-	
-	public DayOne() {		
-		super();
-		this.readData();
-	}
+  private List<Integer> expenses = new ArrayList<>();
 
-	public void readData() {
-		InputStream is = this.getFileAsResource("data/day1.txt");
-		try (InputStreamReader streamReader = new InputStreamReader(is, StandardCharsets.UTF_8);
-				BufferedReader reader = new BufferedReader(streamReader)) {
+  public DayOne()
+  {
+    super();
+    this.readData();
+  }
 
-			String line;
-			while ((line = reader.readLine()) != null) {
-				expenses.add(Integer.valueOf(line));
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+  public void readData()
+  {
+    InputStream is = this.getFileAsResource("data/day1_mae.txt");
+    try (
+      InputStreamReader streamReader =
+        new InputStreamReader(is, StandardCharsets.UTF_8);
+      BufferedReader reader = new BufferedReader(streamReader))
+    {
 
-	public void dumpData() {
-		for(Integer expense : expenses) {
-			System.out.println(expense);
-		}
-	}
-	
-	/**
-	 * Solve the Day 1 problem. Objective:
-	 * 
-	 * Find the two numbers that add up to 2020,
-	 * multiply them and return the result.
-	 * 
-	 */
-	public int solve() {
-		// Step 1: Sort the list
-		
-		// Step 2: Create 3 temporary lists:
-		//   -- Numbers less than (2020 / 2)
-		//   -- Numbers equal to (2020 /2)
-		//   -- Numbers greater than (2020 /2)
-		
-		
-		return 0;
-	}
+      String line;
+      while ((line = reader.readLine()) != null)
+      {
+        expenses.add(Integer.valueOf(line));
+      }
+    }
+    catch (IOException e)
+    {
+      e.printStackTrace();
+    }
+  }
 
-	public static void main(String[] args) {
-		DayOne dOne = new DayOne();
-		int answer = dOne.solve();
-		System.out.println("The answer is: " + answer);
-	}
+  public void dumpData()
+  {
+    for (Integer expense : expenses)
+    {
+      // System.out.println(expense);
+    }
+  }
+
+  /**
+   * Solve the Day 1 problem. Objective:
+   * 
+   * Find the two numbers that add up to 2020,
+   * multiply them and return the result.
+   * 
+   */
+  public int solve()
+  {
+    // Step 1: Sort the list
+    Collections.sort(expenses);
+    dumpData();
+    Integer result = 0;
+
+    // Step 2: Create 3 temporary lists:
+    ArrayList<Integer> lessThan = new ArrayList<>();
+    ArrayList<Integer> moreThan = new ArrayList<>();
+    ArrayList<Integer> equalTo = new ArrayList<>();
+
+    for (Integer expense : expenses)
+    {
+      if (expense < 2020 / 2)
+      {
+        lessThan.add(expense);
+      }
+
+      if (expense > 2020 / 2)
+      {
+        moreThan.add(expense);
+      }
+
+      if (expense == 2020 / 2)
+      {
+        equalTo.add(expense);
+      }
+    }
+
+    for (Integer lList : lessThan)
+    {
+      for (Integer mList : moreThan)
+      {
+        if (lList + mList == 2020)
+        {
+          return lList * mList;
+        }
+      }
+    }
+
+    System.out.println(lessThan.size());
+    System.out.println(moreThan.size());
+    System.out.println(equalTo.size());
+
+    return result;
+  }
+
+  public static void main(String[] args)
+  {
+    DayOne dOne = new DayOne();
+    int answer = dOne.solve();
+    System.out.println("The answer is: " + answer);
+  }
 
 }
