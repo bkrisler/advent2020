@@ -7,22 +7,26 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class DayOne extends DayBase
+public class DayOneBrian extends DayBase
 {
 
   private List<Integer> expenses = new ArrayList<>();
-
-  public DayOne()
+  
+  public DayOneBrian(String person)
   {
     super();
-    this.readData();
+    this.readData(person);
+    
   }
 
-  public void readData()
+  public void readData(String person)
   {
-    InputStream is = this.getFileAsResource("data/day1_mae.txt");
+	System.out.println("Reading in data for: " + person);
+    InputStream is = this.getFileAsResource("data/day1_" + person + ".txt");
     try (
       InputStreamReader streamReader =
         new InputStreamReader(is, StandardCharsets.UTF_8);
@@ -49,6 +53,55 @@ public class DayOne extends DayBase
     }
   }
 
+  public int solve1() {
+	  Collections.sort(expenses);
+	  
+	  List<Integer> less = expenses
+			  .stream()
+			  	.filter(i -> i < 2020 /2)
+			    .collect(Collectors.toList());
+
+	  List<Integer> more = expenses.stream()
+			  	.filter(i -> i > 2020 /2)
+			    .collect(Collectors.toList());
+
+	  for(Integer n1 : more) {
+		  for(Integer n2 : less) {
+			  if(n1 + n2 == 2020) {
+				  return n1 * n2;
+			  }
+		  }
+	  }
+	  return 0;
+  }
+
+  public int solve2() {
+	  Collections.sort(expenses);
+	  
+	  List<Integer> less = expenses
+			  .stream()
+			  	.filter(i -> i < 2020 /2)
+			    .collect(Collectors.toList());
+
+	  List<Integer> more = expenses.stream()
+			  	.filter(i -> i > 2020 /2)
+			    .collect(Collectors.toList());
+
+	  for(Integer n1 : more) {
+		  for(Integer n2 : less) {
+			  if(n1 + n2 < 2020) {
+				  int required = 2020 - (n1 + n2);
+				  if(less.contains(required)) {
+					  int n3 = less.get(less.indexOf(required));
+					  System.out.println("Found 3rd: " + n1 + " + " + n2 + " + " + n3 + " = 2020");
+					  return n1 * n2 * n3;
+				  }
+			  }
+		  }
+	  }
+	  return 0;
+  }
+  
   /**
    * Solve the Day 1 problem. Objective:
    * 
@@ -56,7 +109,7 @@ public class DayOne extends DayBase
    * multiply them and return the result.
    * 
    */
-  public int solve()
+  public int solvePart1()
   {
     // Step 1: Sort the list
     Collections.sort(expenses);
@@ -106,9 +159,18 @@ public class DayOne extends DayBase
 
   public static void main(String[] args)
   {
-    DayOne dOne = new DayOne();
-    int answer = dOne.solve();
-    System.out.println("The answer is: " + answer);
+	String person = "unknown";
+	if(args.length > 0) {
+		person = args[0];
+	}
+	
+    DayOneBrian dOne = new DayOneBrian(person);
+    int answer1 = dOne.solve1();
+    System.out.println("The answer for part one is: " + answer1);
+
+    int answer2 = dOne.solve2();
+    System.out.println("The answer for part two is: " + answer2);
+
   }
 
 }
