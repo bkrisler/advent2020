@@ -18,7 +18,7 @@ public abstract class DayBase {
 
 	protected void readData(String day, String person) {
 		System.out.println("Reading in data for: " + person + " and " + day);
-		InputStream is = this.getFileAsResource("data/" + day + "/" + person + ".txt");
+		InputStream is = this.getFileAsResource("data/" + day + "_" + person + ".txt");
 		try (InputStreamReader streamReader = new InputStreamReader(is, StandardCharsets.UTF_8);
 				BufferedReader reader = new BufferedReader(streamReader)) {
 
