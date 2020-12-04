@@ -1,4 +1,4 @@
-package com.bkds.advent2020;
+package com.bkds.advent2020.day1;
 
 import java.io.InputStream;
 

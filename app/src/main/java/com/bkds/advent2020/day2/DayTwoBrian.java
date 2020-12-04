@@ -1,6 +1,4 @@
-package com.bkds.advent2020;
-
-import com.bkds.advent2020.model.PasswordPolicy;
+package com.bkds.advent2020.day2;
 
 public class DayTwoBrian extends DayTwoBase {
 

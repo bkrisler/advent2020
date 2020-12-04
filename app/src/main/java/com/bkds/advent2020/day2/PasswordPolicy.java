@@ -1,4 +1,4 @@
-package com.bkds.advent2020.model;
+package com.bkds.advent2020.day2;
 
 public class PasswordPolicy {
 	private int min;

@@ -1,4 +1,4 @@
-package com.bkds.advent2020;
+package com.bkds.advent2020.day2;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,7 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.bkds.advent2020.model.PasswordPolicy;
+import com.bkds.advent2020.day1.DayBase;
 
 public class DayTwoBase extends DayBase {
 
