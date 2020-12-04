@@ -31,6 +31,27 @@ public abstract class DayBase {
 		}
 	}
 
+	protected void readDataMultiRow(String day, String person) {
+		System.out.println("Reading in data for: " + person + " and " + day);
+		String entry = "";
+		InputStream is = this.getFileAsResource("data/" + day + "_" + person + ".txt");
+		try (InputStreamReader streamReader = new InputStreamReader(is, StandardCharsets.UTF_8);
+				BufferedReader reader = new BufferedReader(streamReader)) {
+
+			String line;
+			while ((line = reader.readLine()) != null) {
+				if(line.isEmpty()) {
+					store(entry);
+					entry = "";
+				} else {
+					entry += line;
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	private InputStream getFileAsResource(String filename) {
 		ClassLoader classLoader = getClass().getClassLoader();
 		InputStream stream = classLoader.getResourceAsStream(filename);
