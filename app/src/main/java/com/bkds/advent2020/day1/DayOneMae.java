@@ -1,13 +1,10 @@
 package com.bkds.advent2020.day1;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import com.bkds.advent2020.DayBase;
 
 public class DayOneMae extends DayBase
 {
@@ -17,30 +14,13 @@ public class DayOneMae extends DayBase
   public DayOneMae(String person)
   {
     super();
-    this.readData(person);
+    this.readData("day1", person);
 
   }
 
-  public void readData(String person)
-  {
-    System.out.println("Reading in data for: " + person);
-    InputStream is = this.getFileAsResource("data/day1_" + person + ".txt");
-    try (
-      InputStreamReader streamReader =
-        new InputStreamReader(is, StandardCharsets.UTF_8);
-      BufferedReader reader = new BufferedReader(streamReader))
-    {
-
-      String line;
-      while ((line = reader.readLine()) != null)
-      {
-        expenses.add(Integer.valueOf(line));
-      }
-    }
-    catch (IOException e)
-    {
-      e.printStackTrace();
-    }
+  @Override
+  public void store(String input) {
+  	expenses.add(Integer.valueOf(input));	
   }
 
   public void dumpData()

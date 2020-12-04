@@ -10,7 +10,7 @@ public class DayTwoMae extends DayTwoBase
 {
   public DayTwoMae()
   {
-    readData("mae");
+    readData("day3", "mae");
     // dumpData();
   }
 

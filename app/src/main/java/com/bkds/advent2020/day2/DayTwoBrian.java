@@ -3,7 +3,7 @@ package com.bkds.advent2020.day2;
 public class DayTwoBrian extends DayTwoBase {
 
 	public DayTwoBrian() {
-		readData("brian");
+		readData("day2", "brian");
 		dumpData();
 	}
 
