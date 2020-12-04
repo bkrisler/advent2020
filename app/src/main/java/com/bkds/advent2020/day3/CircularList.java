@@ -27,6 +27,10 @@ public class CircularList {
 		return item;
 	}
 	
+	public String get(int index) {				
+		return contents.get(index % contents.size());
+	}
+	
 	public void reset() {
 		this.index = 0;
 	}
