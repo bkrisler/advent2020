@@ -7,25 +7,23 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class DayOneMae extends DayBase
 {
 
   private List<Integer> expenses = new ArrayList<>();
-  
+
   public DayOneMae(String person)
   {
     super();
     this.readData(person);
-    
+
   }
 
   public void readData(String person)
   {
-	System.out.println("Reading in data for: " + person);
+    System.out.println("Reading in data for: " + person);
     InputStream is = this.getFileAsResource("data/day1_" + person + ".txt");
     try (
       InputStreamReader streamReader =
@@ -52,7 +50,7 @@ public class DayOneMae extends DayBase
       System.out.println(expense);
     }
   }
-  
+
   /**
    * Solve the Day 1 problem. Objective:
    * 
@@ -110,16 +108,50 @@ public class DayOneMae extends DayBase
 
   public int solvePart2()
   {
-	  return 0;
+    ArrayList<Integer> greaterThanHalf = new ArrayList<>();
+    ArrayList<Integer> lessThanHalf = new ArrayList<>();
+
+    for (Integer expense : expenses)
+    {
+      if (expense > 2020 / 2)
+      {
+        greaterThanHalf.add(expense);
+      }
+
+      if (expense < 2020 / 2)
+      {
+        lessThanHalf.add(expense);
+      }
+
+    }
+
+    for (Integer gEntry : greaterThanHalf)
+    {
+      for (Integer lentry : lessThanHalf)
+      {
+        if (gEntry + lentry < 2020)
+        {
+          int diff = 2020 - (gEntry + lentry);
+          if (lessThanHalf.contains(diff))
+          {
+            int thirdNumber = lessThanHalf.get(lessThanHalf.indexOf(diff));
+            return gEntry * lentry * thirdNumber;
+          }
+
+        }
+      }
+    }
+    return 0;
   }
-  
+
   public static void main(String[] args)
   {
-	String person = "unknown";
-	if(args.length > 0) {
-		person = args[0];
-	}
-	
+    String person = "unknown";
+    if (args.length > 0)
+    {
+      person = args[0];
+    }
+
     DayOneMae dOne = new DayOneMae(person);
     int answer1 = dOne.solvePart1();
     System.out.println("The answer for part one is: " + answer1);
