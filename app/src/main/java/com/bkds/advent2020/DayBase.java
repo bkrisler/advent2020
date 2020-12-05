@@ -37,16 +37,19 @@ public abstract class DayBase {
 		InputStream is = this.getFileAsResource("data/" + day + "_" + person + ".txt");
 		try (InputStreamReader streamReader = new InputStreamReader(is, StandardCharsets.UTF_8);
 				BufferedReader reader = new BufferedReader(streamReader)) {
-
 			String line;
 			while ((line = reader.readLine()) != null) {
+				System.out.print(line + " ");
 				if(line.isEmpty()) {
+					System.out.println("");
 					store(entry);
 					entry = "";
 				} else {
 					entry += line;
 				}
 			}
+			store(entry);
+			System.out.println("");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
