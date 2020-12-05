@@ -39,17 +39,14 @@ public abstract class DayBase {
 				BufferedReader reader = new BufferedReader(streamReader)) {
 			String line;
 			while ((line = reader.readLine()) != null) {
-				System.out.print(line + " ");
 				if(line.isEmpty()) {
-					System.out.println("");
 					store(entry);
 					entry = "";
 				} else {
-					entry += line;
+					entry += line + " ";
 				}
 			}
 			store(entry);
-			System.out.println("");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
