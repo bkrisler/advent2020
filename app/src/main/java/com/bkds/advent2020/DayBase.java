@@ -9,8 +9,8 @@ import java.nio.charset.StandardCharsets;
 public abstract class DayBase {
 
 	/**
-	 * Called on each data input row received. This allows us
-	 * to store the input as we need for each day.
+	 * Called on each data input row received. This allows us to store the input as
+	 * we need for each day.
 	 * 
 	 * @param input A single line of data from the input
 	 */
@@ -39,7 +39,7 @@ public abstract class DayBase {
 				BufferedReader reader = new BufferedReader(streamReader)) {
 			String line;
 			while ((line = reader.readLine()) != null) {
-				if(line.isEmpty()) {
+				if (line.isEmpty()) {
 					store(entry);
 					entry = "";
 				} else {
