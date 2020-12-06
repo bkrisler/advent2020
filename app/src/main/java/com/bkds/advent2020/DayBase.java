@@ -52,7 +52,7 @@ public abstract class DayBase {
 		}
 	}
 
-	private InputStream getFileAsResource(String filename) {
+	protected InputStream getFileAsResource(String filename) {
 		ClassLoader classLoader = getClass().getClassLoader();
 		InputStream stream = classLoader.getResourceAsStream(filename);
 		if (stream == null) {
