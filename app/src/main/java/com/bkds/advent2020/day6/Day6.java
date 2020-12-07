@@ -57,6 +57,34 @@ public class Day6 extends DayBase {
 		}
 	}
 
+	  public void customsQuestions()
+	  {
+	    int finalCount = 0;
+
+	    for (List<String> group : personGroups)
+	    {
+	      List<String> yesAnswers = new ArrayList<>();
+	      for (String person : group)
+	      {
+	        String[] answers = person.split("");
+
+	        for (int i = 0; i < answers.length; i++)
+	        {
+	          if (!yesAnswers.contains(answers[i]))
+	          {
+	            yesAnswers.add(answers[i]);
+	          }
+	        }
+	      }
+	      System.out.println(yesAnswers.size());
+	      finalCount += yesAnswers.size();
+	      yesAnswers.clear();
+
+	    }
+	    System.out.println(finalCount);
+
+	  }
+
 	protected void brianSolution() {
 		int sum = 0;
 		List<String> map = new ArrayList<>();
@@ -106,10 +134,52 @@ public class Day6 extends DayBase {
 		System.out.println("Final: " + groupSum);
 	}
 
-	public static void main(String[] args) {
-		Day6 d6 = new Day6();
-		// d6.brianSolution();
-		d6.brianPartTwo();
-	}
+  public void partTwo()
+  {
+    int finalAnswer = 0;
+    for (List<String> group : personGroups)
+    {
+      Map<String, Integer> answerTotals = new HashMap<>();
+      for (String person : group)
+      {
+        String[] answers = person.split("");
+
+        for (int i = 0; i < answers.length; i++)
+        {
+          if (answerTotals.containsKey((answers[i])))
+          {
+            answerTotals.put(answers[i], answerTotals.get(answers[i]) + 1);
+          }
+          else
+          {
+            answerTotals.put(answers[i], 1);
+          }
+        }
+      }
+      int groupAnswers = 0;
+      for (String key : answerTotals.keySet())
+      {
+        Integer count = answerTotals.get(key);
+        if (count == group.size())
+        {
+          groupAnswers++;
+        }
+      }
+
+      System.out.println(groupAnswers);
+      // System.out.println(answerTotals);
+      // finalCount += answerTotals.size();
+      answerTotals.clear();
+      finalAnswer += groupAnswers;
+    }
+    System.out.println(finalAnswer);
+  }
+
+  public static void main(String[] args)
+  {
+    Day6 d6 = new Day6();
+    // d6.customsQuestions();
+    d6.partTwo();
+  }
 
 }
