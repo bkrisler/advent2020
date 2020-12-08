@@ -132,18 +132,18 @@ public class Day7Brian extends DayBase {
 
 	private List<String> containers = new ArrayList<>();
 	
-	public void all() {
+	public void reportAllUnique() {
 		List<String> unique = new ArrayList<>(new HashSet<>(containers));
 		System.out.println(unique);
 		System.out.println("Size: " + unique.size());
 	}
 	
-	private void canContain(String string) {
+	private void findBagsThatCanContain(String string) {
 		for(String color : bags.keySet()) {
 			if(bags.get(color).contains(string)) {
 				if(!containers.contains(color)) {
 					containers.add(color);
-					canContain(color);
+					findBagsThatCanContain(color);
 				}
 			}
 		}
@@ -151,9 +151,8 @@ public class Day7Brian extends DayBase {
 
 	public static void main(String[] args) {
 		Day7Brian d7b = new Day7Brian();
-		d7b.canContain("shiny gold bag");
-		d7b.all();
-//		d7b.solvePartOne("shiny gold bag");
+		d7b.findBagsThatCanContain("shiny gold bag");
+		d7b.reportAllUnique();
 	}
 
 }
