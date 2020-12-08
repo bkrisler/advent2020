@@ -2,6 +2,7 @@ package com.bkds.advent2020.day7;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +14,8 @@ public class Day7Brian extends DayBase {
 	private Map<String, List<String>> bags = new HashMap<>();
 	private Tree<BagNode> bagTree = new Tree<>(new BagNode("", 0));
 	private int count = 0;
-
+	private List<String> colors = new ArrayList<>();
+	
 	public Day7Brian() {
 		readData("day7", "brian");
 		populate(bagTree, new ArrayList<>(bags.keySet()));
@@ -68,6 +70,7 @@ public class Day7Brian extends DayBase {
 		if(node.getChildren().size() == 0) {
 			System.out.println(path);
 			System.out.println("");
+			System.out.println("--> " + node.getValue().getColor());
 			count++;
 		}
 		
@@ -87,7 +90,9 @@ public class Day7Brian extends DayBase {
 
 	private void walkTreeFlat(Tree<BagNode> node, String path, int space) {
 
+		
 		if(node.getChildren().size() == 0) {
+			colors.add(node.getValue().getColor());
 			System.out.println(path);
 			count++;
 		}
@@ -95,6 +100,7 @@ public class Day7Brian extends DayBase {
 		for(Tree<BagNode> child : node.getChildren()) {
 			String fwd = path + " > ";
 			fwd += "[" + child.getValue().getColor() + "]";
+			colors.add(node.getValue().getColor());
 			walkTreeFlat(child, fwd, (space + 2));
 		}
 	}
@@ -112,6 +118,16 @@ public class Day7Brian extends DayBase {
 	public void solvePartOne(String bag) {
 		getPaths(bagTree, bag);
 		System.out.println("Total: " + count);
+		List<String> unique = new ArrayList<>(new HashSet<>(colors));
+		if(unique.contains(bag)) {
+			unique.remove(bag);
+		}
+		if(colors.contains(bag)) {
+			colors.remove(bag);
+		}
+		System.out.println("All Colors: [" + colors.size() + "] " + colors);
+		System.out.println("Unique Colors: [" + unique.size() + "] " + unique);
+		
 	}
 
 	public static void main(String[] args) {
