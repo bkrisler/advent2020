@@ -152,6 +152,4 @@ public class Day7Brian extends DayBase {
 			}
 		}
 	}
-
-
 }
