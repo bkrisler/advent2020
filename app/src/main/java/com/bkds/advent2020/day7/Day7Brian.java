@@ -89,10 +89,10 @@ public class Day7Brian extends DayBase {
 	}
 
 	private void walkTreeFlat(Tree<BagNode> node, String path, int space) {
-
 		
 		if(node.getChildren().size() == 0) {
-			colors.add(node.getValue().getColor());
+			String[] cp = node.getValue().getColor().split(" ");			
+			colors.add(cp[1]);
 			System.out.println(path);
 			count++;
 		}
@@ -100,7 +100,8 @@ public class Day7Brian extends DayBase {
 		for(Tree<BagNode> child : node.getChildren()) {
 			String fwd = path + " > ";
 			fwd += "[" + child.getValue().getColor() + "]";
-			colors.add(node.getValue().getColor());
+			String[] cp = node.getValue().getColor().split(" ");			
+			colors.add(cp[1]);
 			walkTreeFlat(child, fwd, (space + 2));
 		}
 	}
@@ -122,9 +123,11 @@ public class Day7Brian extends DayBase {
 		if(unique.contains(bag)) {
 			unique.remove(bag);
 		}
+
 		if(colors.contains(bag)) {
 			colors.remove(bag);
 		}
+
 		System.out.println("All Colors: [" + colors.size() + "] " + colors);
 		System.out.println("Unique Colors: [" + unique.size() + "] " + unique);
 		
