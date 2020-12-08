@@ -1,0 +1,21 @@
+shiny gold bags contain 1 pale turquoise bag.
+pale turquoise bags contain 1 pale tan bag, 4 striped red bags, 1 bright olive bag.
+striped red bags contain 4 faded silver bags, 4 light salmon bags, 3 drab black bags.
+dull lavender bags contain 1 striped plum bag, 5 pale gray bags.
+faded orange bags contain 4 dull lavender bags.
+striped plum bags contain 2 drab black bags, 1 faded silver bag.
+faded black bags contain 1 striped red bag, 1 dim teal bag, 5 faded silver bags, 3 striped plum bags.
+posh aqua bags contain 3 faded silver bags, 5 pale tan bags, 2 striped red bags, 3 light salmon bags.
+muted cyan bags contain 5 posh aqua bags, 2 faded silver bags, 2 striped red bags, 4 dim tomato bags.
+dim purple bags contain 5 dull lavender bags, 4 faded black bags, 1 muted cyan bag.
+plaid black bags contain 1 light salmon bag, 3 mirrored orange bags, 2 dim purple bags.
+bright olive bags contain 5 faded orange bags, 1 plaid black bag, 2 plaid gray bags, 3 faded silver bags.
+pale tan bags contain no other bags.
+faded silver bags contain no other bags.
+plaid gray bags contain no other bags.
+dim tomato bags contain no other bags.
+light salmon bags contain no other bags.
+drab black bags contain no other bags.
+dim teal bags contain no other bags.
+mirrored orange bags contain no other bags.
+pale gray bags contain no other bags.

@@ -12,9 +12,10 @@ public class Day7Brian extends DayBase {
 
 	private Map<String, List<String>> bags = new HashMap<>();
 	private Tree<BagNode> bagTree = new Tree<>(new BagNode("", 0));
-	
+	private int count = 0;
+
 	public Day7Brian() {
-		readData("day7", "test");
+		readData("day7", "brian");
 		populate(bagTree, new ArrayList<>(bags.keySet()));
 	}
 
@@ -28,8 +29,6 @@ public class Day7Brian extends DayBase {
 			// Strip off the s
 			bagColor = bagColor.substring(0, bagColor.length() - 1);
 		}
-
-		// Tree<BagNode> treeNode = bagTree.addChild(new BagNode(bagColor, 0));
 
 		// Get the outer bags now
 		List<String> outerBagList = new ArrayList<>();
@@ -49,7 +48,6 @@ public class Day7Brian extends DayBase {
 				}
 
 				BagNode cNode = new BagNode(pColor, Integer.valueOf(count));
-//				treeNode.addChild(cNode);
 				outerBagList.add(cNode.getColor());
 			}
 		}
@@ -64,22 +62,6 @@ public class Day7Brian extends DayBase {
 			}
 		}
 	}
-
-//	private void printPath(Tree<BagNode> node, StringBuffer path) {
-//		if(node.getValue() == null) {
-//			return;
-//		}
-//		path.append(" " + node.getValue().getColor());
-//		if(node.getChildren().isEmpty()) {
-//			System.out.println(path);
-//		} else {
-//			for(Tree<BagNode> child : node.getChildren()) {
-//				printPath(child, path);
-//			}
-//		}
-//	}
-
-	private int count = 0;
 	
 	private String walkTree(Tree<BagNode> node, String path, int space) {
 
@@ -103,17 +85,31 @@ public class Day7Brian extends DayBase {
 		return node.getValue().getColor();
 	}
 
+	private void walkTreeFlat(Tree<BagNode> node, String path, int space) {
+
+		if(node.getChildren().size() == 0) {
+			System.out.println(path);
+			count++;
+		}
+		
+		for(Tree<BagNode> child : node.getChildren()) {
+			String fwd = path + " > ";
+			fwd += "[" + child.getValue().getColor() + "]";
+			walkTreeFlat(child, fwd, (space + 2));
+		}
+	}
+
 	private void getPaths(Tree<BagNode> node, String root) {
 		for(Tree<BagNode> bagNode : bagTree.getChildren()) {
 			if(bagNode.getValue().getColor().equals(root)) {
-				walkTree(bagNode, root, 2);
+//				walkTree(bagNode, root, 2);
+				walkTreeFlat(bagNode, "[" + root + "]", 2);
 				break;
 			}
 		}
 	}
 
 	public void solvePartOne(String bag) {
-		System.out.println("Day 7");
 		getPaths(bagTree, bag);
 		System.out.println("Total: " + count);
 	}
