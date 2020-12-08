@@ -109,7 +109,7 @@ public class Day7Brian extends DayBase
     if (node.getChildren().size() == 0)
     {
       String[] cp = node.getValue().getColor().split(" ");
-      colors.add(cp[1]);
+      colors.add(cp[1].trim());
       System.out.println(path);
       count++;
     }
@@ -119,7 +119,7 @@ public class Day7Brian extends DayBase
       String fwd = path + " > ";
       fwd += "[" + child.getValue().getColor() + "]";
       String[] cp = node.getValue().getColor().split(" ");
-      colors.add(cp[1]);
+      colors.add(cp[1].trim());
       walkTreeFlat(child, fwd, (space + 2));
     }
   }
@@ -141,25 +141,46 @@ public class Day7Brian extends DayBase
   {
     getPaths(bagTree, bag);
     System.out.println("Total: " + count);
+    if (colors.contains("gold"))
+    {
+      colors.remove("gold");
+    }
     List<String> unique = new ArrayList<>(new HashSet<>(colors));
-    if (unique.contains(bag))
-    {
-      unique.remove(bag);
-    }
-
-    if (colors.contains(bag))
-    {
-      colors.remove(bag);
-    }
 
     System.out.println("All Colors: [" + colors.size() + "] " + colors);
     System.out.println("Unique Colors: [" + unique.size() + "] " + unique);
 
   }
 
+  private List<String> containers = new ArrayList<>();
+
+  public void reportAllUnique()
+  {
+    List<String> unique = new ArrayList<>(new HashSet<>(containers));
+    System.out.println(unique);
+    System.out.println("Size: " + unique.size());
+  }
+
+  private void findBagsThatCanContain(String string)
+  {
+    for (String color : bags.keySet())
+    {
+      if (bags.get(color).contains(string))
+      {
+        if (!containers.contains(color))
+        {
+          containers.add(color);
+          findBagsThatCanContain(color);
+        }
+      }
+    }
+  }
+
   public static void main(String[] args)
   {
     Day7Brian d7b = new Day7Brian();
-    d7b.solvePartOne("shiny gold bag");
+    d7b.findBagsThatCanContain("shiny gold bag");
+    d7b.reportAllUnique();
   }
+
 }
