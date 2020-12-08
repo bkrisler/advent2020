@@ -27,6 +27,31 @@ public class BagNode {
 	public String toString() {
 		return "BagNode [bagColor=" + bagColor + ", count=" + count + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((bagColor == null) ? 0 : bagColor.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		BagNode other = (BagNode) obj;
+		if (bagColor == null) {
+			if (other.bagColor != null)
+				return false;
+		} else if (!bagColor.equals(other.bagColor))
+			return false;
+		return true;
+	}
 	
 	
 //	public List<BagNode> getInnerBags() {

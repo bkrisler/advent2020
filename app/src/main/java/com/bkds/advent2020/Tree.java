@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
 
+import com.bkds.advent2020.day7.BagNode;
+
 public class Tree<T> {
 
 	private T value;
@@ -39,12 +41,26 @@ public class Tree<T> {
 		this.children = children;
 	}
 
+	public void visit(Tree<T> root, List<String> bagColors, int spc) {
+		BagNode bn = (BagNode) root.getValue();
+		if(!bagColors.contains(bn.getColor())) {
+			bagColors.add(bn.getColor());
+		}
+		for(int i=0; i < spc; i++) {
+			System.out.print(" ");
+		}
+		System.out.println(bn.getColor());
+		for(Tree<T> child : root.getChildren()) {
+			visit(child, bagColors, spc+2);
+		}
+	}
+	
 	public static <T> Optional<Tree<T>> search(T value, Tree<T> root) {
 		Queue<Tree<T>> queue = new ArrayDeque<>();
 		queue.add(root);
 		while(!queue.isEmpty()) {
 			Tree<T> currentNode = queue.remove();
-			if(currentNode.children.isEmpty()) {
+			if(currentNode.getValue().equals(value)) {
 				return Optional.of(currentNode);
 			} else {
 			    queue.addAll(currentNode.getChildren());

@@ -2,9 +2,10 @@ package com.bkds.advent2020.day7;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.bkds.advent2020.DayBase;
 import com.bkds.advent2020.Tree;
@@ -12,13 +13,10 @@ import com.bkds.advent2020.Tree;
 public class Day7Brian extends DayBase {
 
 	private Map<String, List<String>> bags = new HashMap<>();
-	private Tree<BagNode> bagTree = new Tree<>(new BagNode("", 0));
-	private int count = 0;
-	private List<String> colors = new ArrayList<>();
-	
+	private Map<String, List<BagNode>> bagNodes = new HashMap<>();
+
 	public Day7Brian() {
 		readData("day7", "brian");
-		populate(bagTree, new ArrayList<>(bags.keySet()));
 	}
 
 	@Override
@@ -34,6 +32,8 @@ public class Day7Brian extends DayBase {
 
 		// Get the outer bags now
 		List<String> outerBagList = new ArrayList<>();
+		List<BagNode> obNList = new ArrayList<>();
+
 		if (!(part1[1].equals("no other bags."))) {
 			String[] outerBags = part1[1].split(",");
 			for (String bag : outerBags) {
@@ -51,108 +51,107 @@ public class Day7Brian extends DayBase {
 
 				BagNode cNode = new BagNode(pColor, Integer.valueOf(count));
 				outerBagList.add(cNode.getColor());
+				obNList.add(cNode);
 			}
 		}
 		bags.put(bagColor, outerBagList);
+		bagNodes.put(bagColor, obNList);
 	}
 
+	public List<Tree<BagNode>> buildAllTrees() {
+		List<Tree<BagNode>> allTrees = new ArrayList<>();
+		for(String color : bags.keySet()) {
+			allTrees.add(buildTree(color));
+		}
+		return allTrees;
+	}
+	
+	private Tree<BagNode> buildTree(String rootName) {
+		Tree<BagNode> root = new Tree<>(new BagNode(rootName, 1));
+		List<String> children = bags.get(rootName);
+		populate(root, children);
+		return root;		
+	}
+	
+	private int countForColor(String parent, String color) {
+		List<BagNode> bnList = bagNodes.get(parent);
+		List<Integer> count = bnList.stream().filter(n -> n.getColor().equals(color)).map(BagNode::getCount).collect(Collectors.toList());
+		return count.get(0);
+	}
+	
 	private void populate(Tree<BagNode> parent, List<String> children) {
 		for (String color : children) {
-			Tree<BagNode> child = parent.addChild(new BagNode(color, 0));
+			int count = countForColor(parent.getValue().getColor(), color);
+			Tree<BagNode> child = parent.addChild(new BagNode(color, count));
 			if (!bags.get(color).isEmpty()) {
 				populate(child, bags.get(color));
 			}
 		}
 	}
-	
-	private String walkTree(Tree<BagNode> node, String path, int space) {
 
-		if(node.getChildren().size() == 0) {
-			System.out.println(path);
-			System.out.println("");
-			System.out.println("--> " + node.getValue().getColor());
-			count++;
-		}
-		
-		for(Tree<BagNode> child : node.getChildren()) {
-			String fwd = path;
-			fwd += "\n";
-			for(int i=0; i < space; i++) {
-				fwd += " ";
+	private int findContains(List<Tree<BagNode>> allTrees, String color) {
+		int count = 0;
+		for(Tree<BagNode> tree : allTrees) {
+			if(!tree.getValue().getColor().equals(color)) {
+				Optional<Tree<BagNode>> result = Tree.search(new BagNode(color, 0), tree);
+				if(result.isPresent()) {
+					count++;
+				}
 			}
-			fwd += "\u2515 ";
-			fwd += child.getValue().getColor();
-			walkTree(child, fwd, (space + 2));
 		}
-
-		return node.getValue().getColor();
+		return count;
 	}
 
-	private void walkTreeFlat(Tree<BagNode> node, String path, int space) {
-		
-		if(node.getChildren().size() == 0) {
-			String[] cp = node.getValue().getColor().split(" ");			
-			colors.add(cp[1].trim());
-			System.out.println(path);
-			count++;
-		}
-		
-		for(Tree<BagNode> child : node.getChildren()) {
-			String fwd = path + " > ";
-			fwd += "[" + child.getValue().getColor() + "]";
-			String[] cp = node.getValue().getColor().split(" ");			
-			colors.add(cp[1].trim());
-			walkTreeFlat(child, fwd, (space + 2));
+
+	private void addSpace(int count) {
+		for(int i=0; i < count; i++) {
+			System.out.print(" ");
 		}
 	}
-
+	
+	private int countRequiredBags(Tree<BagNode> tree, int spc) {
+		int fullCount = 0;
+		int childTotal = 0;
+		if(tree.getChildren().size() == 0) {
+			return 0;
+		} else {		
+//			addSpace(spc+2);
+//			System.out.println(tree.getValue().getCount() + " " + tree.getValue().getColor() + " contains: ");
+			for(Tree<BagNode> child : tree.getChildren()) {
+//				addSpace(spc);
+//				System.out.println("  - " + child.getValue().getCount() + " " + child.getValue().getColor());
+				childTotal += child.getValue().getCount();
+				int cResult = countRequiredBags(child, (spc+2));
+				childTotal += cResult;
+			}
+			fullCount += childTotal * tree.getValue().getCount();
+		}
+//		addSpace(spc+2);
+//		System.out.println("--->> " + tree.getValue().getCount() + " " + 
+//		tree.getValue().getColor() + " = (" + childTotal + " * " + tree.getValue().getCount() + ") = " + fullCount);
 		
-	private void getPaths(Tree<BagNode> node, String root) {
-		for(Tree<BagNode> bagNode : bagTree.getChildren()) {
-			if(bagNode.getValue().getColor().equals(root)) {
-//				walkTree(bagNode, root, 2);
-				walkTreeFlat(bagNode, "[" + root + "]", 2);
+		return fullCount;
+	}
+
+	public static void main(String[] args) {
+		Day7Brian d7b = new Day7Brian();
+		List<Tree<BagNode>> allTrees = d7b.buildAllTrees();
+		
+		// Part One
+		int count = d7b.findContains(allTrees, "shiny gold bag");
+		System.out.println("shiny gold bag is in: " + count + " bags.");
+		
+		System.out.println("\n--------------------------\n");
+		
+		// Part Two
+		for(Tree<BagNode> tree : allTrees) {
+			if(tree.getValue().getColor().equals("shiny gold bag")) {
+				int requiredBags = d7b.countRequiredBags(tree, 0);
+				System.out.println("You need: " + (1 + requiredBags) + " bags.");
 				break;
 			}
 		}
 	}
 
-	public void solvePartOne(String bag) {
-		getPaths(bagTree, bag);
-		System.out.println("Total: " + count);
-		if(colors.contains("gold")) {
-			colors.remove("gold");
-		}
-		List<String> unique = new ArrayList<>(new HashSet<>(colors));
-
-		System.out.println("All Colors: [" + colors.size() + "] " + colors);
-		System.out.println("Unique Colors: [" + unique.size() + "] " + unique);
-		
-	}
-
-	private List<String> containers = new ArrayList<>();
-	
-	public void reportAllUnique() {
-		List<String> unique = new ArrayList<>(new HashSet<>(containers));
-		System.out.println(unique);
-		System.out.println("Size: " + unique.size());
-	}
-	
-	private void findBagsThatCanContain(String string) {
-		for(String color : bags.keySet()) {
-			if(bags.get(color).contains(string)) {
-				if(!containers.contains(color)) {
-					containers.add(color);
-					findBagsThatCanContain(color);
-				}
-			}
-		}
-	}
-
-	public static void main(String[] args) {
-		Day7Brian d7b = new Day7Brian();
-		d7b.findBagsThatCanContain("shiny gold bag");
-		d7b.reportAllUnique();
-	}
 
 }
