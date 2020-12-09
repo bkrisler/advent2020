@@ -52,13 +52,13 @@ public class Day8 extends DayBase {
 			switch (sep[0]) {
 			case "acc":
 				incrementACC(sep[1]);
-				pointer += 1;
+				pointer++;
 				break;
 			case "jmp":
 				pointer = jump(sep[1]);
 				break;
 			case "nop":
-				pointer += 1;
+				pointer++;
 				break;
 			}
 		}
