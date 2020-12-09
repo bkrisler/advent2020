@@ -55,6 +55,22 @@ public class Tree<T> {
 		}
 	}
 	
+	public static <T> void dumpTree(Tree<T> root, int spc) {
+		BagNode bn = (BagNode) root.getValue();
+		for(int i=0; i < spc; i++) {
+			if(i % 2 == 0) {
+				System.out.print("\u2506");				
+			} else {
+				System.out.print(" ");
+			}
+		}
+		
+		System.out.println("\u251C\u2500 " + bn.getColor());
+		for(Tree<T> child : root.getChildren()) {
+			dumpTree(child, (spc + 2));			
+		}		
+	}
+	
 	public static <T> Optional<Tree<T>> search(T value, Tree<T> root) {
 		Queue<Tree<T>> queue = new ArrayDeque<>();
 		queue.add(root);

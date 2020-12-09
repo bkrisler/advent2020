@@ -106,24 +106,6 @@ public class Day7Brian extends DayBase
     }
   }
 
-  private int findContains(List<Tree<BagNode>> allTrees, String color)
-  {
-    int count = 0;
-    for (Tree<BagNode> tree : allTrees)
-    {
-      if (!tree.getValue().getColor().equals(color))
-      {
-        Optional<Tree<BagNode>> result =
-          Tree.search(new BagNode(color, 0), tree);
-        if (result.isPresent())
-        {
-          count++;
-        }
-      }
-    }
-    return count;
-  }
-
   private void addSpace(int count)
   {
     for (int i = 0; i < count; i++)
@@ -142,26 +124,45 @@ public class Day7Brian extends DayBase
     }
     else
     {
-      addSpace(spc + 2);
-      System.out.println(tree.getValue().getCount() + " "
-        + tree.getValue().getColor() + " contains: ");
+      // addSpace(spc+2);
+      // System.out.println(tree.getValue().getCount() + " " +
+      // tree.getValue().getColor() + " contains: ");
       for (Tree<BagNode> child : tree.getChildren())
       {
-        addSpace(spc);
-        System.out.println(" - " + child.getValue().getCount() + " "
-          + child.getValue().getColor());
+        // addSpace(spc);
+        // System.out.println(" \u2515 " + child.getValue().getCount() + " " +
+        // child.getValue().getColor());
         childTotal += child.getValue().getCount();
         int cResult = countRequiredBags(child, (spc + 2));
         childTotal += cResult;
       }
       fullCount += childTotal * tree.getValue().getCount();
     }
-    addSpace(spc + 2);
-    System.out.println("--->> " + tree.getValue().getCount() + " "
-      + tree.getValue().getColor() + " = (" + childTotal + " * "
-      + tree.getValue().getCount() + ") = " + fullCount);
+
+    // addSpace(spc+2);
+    // System.out.println("--->> " + tree.getValue().getCount() + " " +
+    // tree.getValue().getColor() + " contains = (" + childTotal + " * " +
+    // tree.getValue().getCount() + ") = " + fullCount + " bags.");
 
     return fullCount;
+  }
+
+  private int findContains(List<Tree<BagNode>> allTrees, String color)
+  {
+    int count = 0;
+    for (Tree<BagNode> tree : allTrees)
+    {
+      if (!tree.getValue().getColor().equals(color))
+      {
+        Optional<Tree<BagNode>> result =
+          Tree.search(new BagNode(color, 0), tree);
+        if (result.isPresent())
+        {
+          count++;
+        }
+      }
+    }
+    return count;
   }
 
   public static void main(String[] args)
@@ -180,8 +181,10 @@ public class Day7Brian extends DayBase
     {
       if (tree.getValue().getColor().equals("shiny gold bag"))
       {
+        // Tree.dumpTree(tree, 0);
+
         int requiredBags = d7b.countRequiredBags(tree, 0);
-        System.out.println("You need: " + (1 + requiredBags) + " bags.");
+        System.out.println("You need: " + (requiredBags) + " bags.");
         break;
       }
     }
