@@ -16,7 +16,7 @@ public class Day7Brian extends DayBase {
 	private Map<String, List<BagNode>> bagNodes = new HashMap<>();
 
 	public Day7Brian() {
-		readData("day7", "brian");
+		readData("day7", "mae");
 	}
 
 	@Override
@@ -119,16 +119,18 @@ public class Day7Brian extends DayBase {
 //			System.out.println(tree.getValue().getCount() + " " + tree.getValue().getColor() + " contains: ");
 			for(Tree<BagNode> child : tree.getChildren()) {
 //				addSpace(spc);
-//				System.out.println("  - " + child.getValue().getCount() + " " + child.getValue().getColor());
+//				System.out.println("  \u2515 " + child.getValue().getCount() + " " + child.getValue().getColor());
 				childTotal += child.getValue().getCount();
 				int cResult = countRequiredBags(child, (spc+2));
 				childTotal += cResult;
 			}
 			fullCount += childTotal * tree.getValue().getCount();
 		}
+
 //		addSpace(spc+2);
 //		System.out.println("--->> " + tree.getValue().getCount() + " " + 
-//		tree.getValue().getColor() + " = (" + childTotal + " * " + tree.getValue().getCount() + ") = " + fullCount);
+//		tree.getValue().getColor() + " contains = (" + childTotal + " * " + 
+//				tree.getValue().getCount() + ") = " + fullCount + " bags.");
 		
 		return fullCount;
 	}
@@ -146,8 +148,10 @@ public class Day7Brian extends DayBase {
 		// Part Two
 		for(Tree<BagNode> tree : allTrees) {
 			if(tree.getValue().getColor().equals("shiny gold bag")) {
+				//Tree.dumpTree(tree, 0);
+
 				int requiredBags = d7b.countRequiredBags(tree, 0);
-				System.out.println("You need: " + (1 + requiredBags) + " bags.");
+				System.out.println("You need: " + (requiredBags) + " bags.");
 				break;
 			}
 		}
