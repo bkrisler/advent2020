@@ -2,8 +2,10 @@ package com.bkds.advent2020.day10;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.IntSummaryStatistics;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.bkds.advent2020.DayBase;
@@ -16,7 +18,7 @@ public class Day10Brian extends DayBase {
 	List<Integer> data = new ArrayList<>();
 
 	public Day10Brian() {
-		readData("day10", "sample");
+		readData("day10", "brian");
 		Collections.sort(data);
 	}
 
@@ -40,70 +42,75 @@ public class Day10Brian extends DayBase {
 			source = selected;
 			result = findPluggable(result.get(0));
 		}
-		
+
 		System.out.println("1 Jolt Difference: " + oneJoltDiff);
 		System.out.println("3 Jolt Difference: " + threeJoltDiff);
 		System.out.println("Result = " + oneJoltDiff * threeJoltDiff);
 	}
 
-	public Tree<Integer> addChildren(Tree<Integer> treeNode) {
-		List<Integer> paths = getPaths(treeNode.getValue());
+	Map<Integer, Tree<CNode>> monoMap = new HashMap<>();
+	long childCount = 1;
 
-		if(paths == null || paths.isEmpty()) {
-			return null;
+	public void addChildren(Tree<CNode> treeNode) {
+		List<Integer> paths = getPaths(treeNode.getValue().value);
+		for (Integer node : paths) {
+			Tree<CNode> tNode = null;
+			if (monoMap.containsKey(node)) {
+				tNode = monoMap.get(node);
+				treeNode.addChild(tNode);
+			} else {
+				CNode cn = new CNode(node);				
+				tNode = treeNode.addChild(cn);
+				monoMap.put(node, tNode);
+				addChildren(tNode);
+			}
 		}
-		
-		for(Integer node : paths) {
-			addChildren(treeNode.addChild(node));
+		if(paths.size() == 0) {
+			treeNode.getValue().leafBelowCount = 0;
+			treeNode.getValue().isLeaf = true;
+		} else {
+			for(Tree<CNode> tc : treeNode.getChildren()) {
+				if(tc.getValue().isLeaf) {
+					treeNode.getValue().leafBelowCount++;
+				} else {
+					treeNode.getValue().leafBelowCount += tc.getValue().leafBelowCount;
+				}
+			}
 		}
-		
-		return null;
 	}
-	
+
 	private List<Integer> getPaths(Integer start) {
-		List<Integer> paths = new ArrayList<>();
-		int idx = data.indexOf(start) + 1;
-		if(idx >= data.size()) return paths;
-		int nxt = data.get(idx);
-		while((idx < data.size() - 1) && (nxt - start < 4)) {
-			idx++;
-			paths.add(nxt);
-			nxt = data.get(idx);
-		}
-		
+		List<Integer> paths = data.stream().filter(x -> (x > start) && (x <= start + 3)).collect(Collectors.toList());
 		return paths;
 	}
 
-	private List<Integer> getPaths2(int startIndex) {
-		List<Integer> paths = new ArrayList<>();
-		Integer startValue = data.get(startIndex);
-		int idx = startIndex + 1;
-		if(idx >= data.size()) return paths;
-		int nxt = data.get(idx);
-		while((idx < data.size() - 1) && (nxt - startValue < 4)) {
-			idx++;
-			paths.add(nxt);
-			nxt = data.get(idx);
-		}
-		
-		return paths;
-	}
-	
 	public void solve2() {
-		Tree<Integer> root = new Tree<>(0);
-		Tree<Integer> child = new Tree<>(data.get(0));
-		addChildren(child);
-		
-//		//		Tree<Integer> currentNode = tree;
-//		for(int i=0; i < data.size(); i++) {
-//			Tree<Integer> crnt = new Tree<>(data.get(i));
-//			Tree<Integer> child = addChildren(crnt, data.get(i)); 			
-//		}
-		System.out.println("Here");
+		CNode start = new CNode(0);
+		Tree<CNode> tree = new Tree<>(start);
+		System.out.println();
+		addChildren(tree);		
+		//Tree.dumpTree(tree, 0);
+		System.out.println("Child Count: " + tree.getValue().leafBelowCount);
 	}
-	
+
+//	public long factorial(int n) {
+//		return LongStream.rangeClosed(1, n).reduce(1, (long x, long y) -> x * y);
+//	}
+//
+//	public long combination(int n, int k) {
+//		long result = (factorial(n) / factorial(k) * (factorial(n - k)));
+//		return result;
+//	}
+
 	public List<Integer> findPluggable(int source) {
-		List<Integer> result = data.stream().filter(x -> (x >= source + 1 & (x <= source + 3)))
+		List<Integer> result = data.stream().filter(x -> (x >= source + 1 && (x <= source + 3)))
+				.collect(Collectors.toList());
+
+		return result;
+	}
+
+	public List<Integer> findPluggable2(int source, List<Integer> d) {
+		List<Integer> result = d.stream().filter(x -> (x >= source + 1 && (x <= source + 3)))
 				.collect(Collectors.toList());
 
 		return result;
@@ -118,5 +125,21 @@ public class Day10Brian extends DayBase {
 	public static void main(String[] args) {
 		Day10Brian b = new Day10Brian();
 		b.solve2();
+		System.out.println("Done");
+	}
+	
+	class CNode {
+		public int value = 0;
+		public long leafBelowCount = 0;
+		public boolean isLeaf = false;
+		
+		public CNode(int value) {
+			this.value = value;
+		}
+
+		@Override
+		public String toString() {
+			return "CNode [value=" + value + ", leafBelowCount=" + leafBelowCount + "]";
+		}		
 	}
 }

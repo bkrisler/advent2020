@@ -24,6 +24,10 @@ public class Tree<T> {
 		return newChild;
 	}
 	
+	public Tree<T> addChild(Tree<T> child) {
+		children.add(child);
+		return child;
+	}
 	
 	public T getValue() {
 		return value;
@@ -55,7 +59,7 @@ public class Tree<T> {
 		}
 	}
 	
-	public static <T> void dumpTree(Tree<T> root, int spc) {
+	public static <T> void dumpTreeOLD(Tree<T> root, int spc) {
 		BagNode bn = (BagNode) root.getValue();
 		for(int i=0; i < spc; i++) {
 			if(i % 2 == 0) {
@@ -67,10 +71,50 @@ public class Tree<T> {
 		
 		System.out.println("\u251C\u2500 " + bn.getColor());
 		for(Tree<T> child : root.getChildren()) {
-			dumpTree(child, (spc + 2));			
+			dumpTreeOLD(child, (spc + 2));			
 		}		
 	}
 	
+	public static <T> Optional<Long> countLeaves(Tree<T> root) {
+		Queue<Tree<T>> queue = new ArrayDeque<>();
+		queue.add(root);
+		long leafCount = 0;
+		while(!queue.isEmpty()) {
+			Tree<T> currentNode = queue.remove();
+			if(currentNode.getChildren().size() == 0) {
+				leafCount++;
+			} else {
+				queue.addAll(currentNode.getChildren());
+			}			
+		}
+		return Optional.of(leafCount);
+	}
+	
+	public static <T> long dumpTree(Tree<T> root, int spc) {
+		int leafCount = 0;
+		for(int i=0; i < spc; i++) {
+			if(i % 2 == 0) {
+				System.out.print("\u2506");				
+			} else {
+				System.out.print(" ");
+			}
+		}
+		
+		System.out.print("\u251C\u2500 " + root.getValue());
+		if(root.getChildren().size() == 0) {
+			System.out.println(" * ");
+			leafCount += 1;
+		} else {
+			System.out.println();			
+		}
+		
+		for(Tree<T> child : root.getChildren()) {
+			leafCount += dumpTree(child, (spc + 2));			
+		}	
+		
+		return leafCount;
+	}
+
 	public static <T> Optional<Tree<T>> search(T value, Tree<T> root) {
 		Queue<Tree<T>> queue = new ArrayDeque<>();
 		queue.add(root);
