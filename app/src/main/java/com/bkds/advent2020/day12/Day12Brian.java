@@ -15,7 +15,7 @@ public class Day12Brian extends DayBase {
 	private Map<String, List<String>> lCoords = new HashMap<>();
 	
 	public Day12Brian() {
-		readData("day12", "brian");
+		readData("day12", "sample");
 		populateRCoords();
 		populateLCoords();
 	}
@@ -58,18 +58,11 @@ public class Day12Brian extends DayBase {
 	}
 
 	public void solveA(List<String> instructions) {
-		Map<String, Integer> coords = new HashMap<>();
-		coords.put("N", 0);
-		coords.put("S", 0);
-		coords.put("E", 0);
-		coords.put("W", 0);
-		
 		int northSouth = 0;
 		int eastWest = 0;
 		
 		String currentDirection = "E";
 		
-		int count = 0;
 		for(String instruction : instructions) {
 			String direction = instruction.substring(0, 1);
 			int distance = Integer.valueOf(String.join("", instruction.subSequence(1, instruction.length())));
@@ -107,13 +100,7 @@ public class Day12Brian extends DayBase {
 			default:
 				System.err.println("Unknown: " + direction);
 				break;
-			}
-			
-//			System.out.print("Index: " + count);
-//			System.out.print("  N/S: " + northSouth);
-//			System.out.print("  E/W: " + eastWest);		
-//			System.out.println();
-			count++;
+			}			
 		}
 		
 		System.out.println("Final coords: ");
@@ -123,8 +110,57 @@ public class Day12Brian extends DayBase {
 		System.out.println(" --> Manhattan distance: " + mDist);
  	}
 
+	public void solveB(List<String> instructions) {
+		int waypointNorthSouth = 10;
+		int waypointEastWest = 1;
+		int shipNorthSouth = 10;
+		int shipEastWest = 1;
+		
+		for(String instruction : instructions) {
+			String direction = instruction.substring(0, 1);
+			int distance = Integer.valueOf(String.join("", instruction.subSequence(1, instruction.length())));
+			//System.out.println("Instruction: " + instruction + " (" + direction + ") (" + distance + ")");
+			switch(direction) {
+			case "N":
+				waypointNorthSouth += distance;
+				break;
+			case "S":
+				waypointNorthSouth -= distance;
+				break;			
+			case "E":
+				waypointEastWest += distance;
+				break;
+			case "W":
+				waypointEastWest -= distance;
+				break;
+			case "L":
+				//currentDirection = rotateLeft(currentDirection, distance);
+				break;
+			case "R":
+				//currentDirection = rotateRight(currentDirection, distance);
+				break;
+			case "F":
+				shipNorthSouth *= distance;
+				shipEastWest *= distance;
+				break;
+			default:
+				System.err.println("Unknown: " + direction);
+				break;
+			}
+			System.out.println("N/S = " + shipNorthSouth + ", E/W = " + shipEastWest);
+		}
+
+		System.out.println("Final coords: ");
+		System.out.println("  N/S: " + shipNorthSouth);
+		System.out.println("  E/W: " + shipEastWest);	
+		int mDist = Math.abs(shipNorthSouth) + Math.abs(shipEastWest);
+		System.out.println(" --> Manhattan distance: " + mDist);
+
+	}
+	
 	public static void main(String[] args) {
 		Day12Brian db = new Day12Brian();
-		db.solveA(db.getNavInstructions());
+		//db.solveA(db.getNavInstructions());
+		db.solveB(db.getNavInstructions());
 	}
 }
