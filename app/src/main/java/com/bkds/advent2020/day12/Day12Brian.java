@@ -15,7 +15,7 @@ public class Day12Brian extends DayBase {
 	private Map<String, List<String>> lCoords = new HashMap<>();
 	
 	public Day12Brian() {
-		readData("day12", "sample");
+		readData("day12", "brian");
 		populateRCoords();
 		populateLCoords();
 	}
@@ -111,10 +111,10 @@ public class Day12Brian extends DayBase {
  	}
 
 	public void solveB(List<String> instructions) {
-		int waypointNorthSouth = 10;
-		int waypointEastWest = 1;
-		int shipNorthSouth = 10;
-		int shipEastWest = 1;
+		int waypointEastWest = 10;
+		int waypointNorthSouth = 1;
+		int shipEastWest = 0;
+		int shipNorthSouth = 0;
 		
 		for(String instruction : instructions) {
 			String direction = instruction.substring(0, 1);
@@ -134,23 +134,51 @@ public class Day12Brian extends DayBase {
 				waypointEastWest -= distance;
 				break;
 			case "L":
-				//currentDirection = rotateLeft(currentDirection, distance);
+				if(distance == 90) {
+					int tmpEW = -1 * waypointNorthSouth;
+					int tmpNS = waypointEastWest;
+					waypointNorthSouth = tmpNS;
+					waypointEastWest = tmpEW;
+				} else if(distance == 180) {
+					waypointEastWest = -1 * waypointEastWest;
+					waypointNorthSouth = -1 * waypointNorthSouth;
+				} else if(distance == 270) {
+					int tmpEW = -1 * waypointNorthSouth;
+					int tmpNS = waypointEastWest;
+					waypointEastWest = tmpEW;
+					waypointNorthSouth = tmpNS;					
+				}
 				break;
 			case "R":
-				//currentDirection = rotateRight(currentDirection, distance);
+				if(distance == 90) {
+					int tmpEW = waypointNorthSouth;
+					int tmpNS = -1 * waypointEastWest;
+					waypointEastWest = tmpEW;
+					waypointNorthSouth = tmpNS;
+				} else if(distance == 180) {
+					waypointEastWest = -1 * waypointEastWest;
+					waypointNorthSouth = -1 * waypointNorthSouth;
+				} else if(distance == 270) {
+					int tmpE = waypointNorthSouth;
+					int tmpN = -1 * waypointEastWest;
+					waypointEastWest = tmpE;
+					waypointNorthSouth = tmpN;
+				}
 				break;
 			case "F":
-				shipNorthSouth *= distance;
-				shipEastWest *= distance;
+				shipEastWest += distance * waypointEastWest;
+				shipNorthSouth += distance * waypointNorthSouth;
 				break;
 			default:
 				System.err.println("Unknown: " + direction);
 				break;
 			}
-			System.out.println("N/S = " + shipNorthSouth + ", E/W = " + shipEastWest);
+			System.out.print(instruction + " S: " + shipEastWest + "E, " + shipNorthSouth + "N");
+			System.out.println("  W: " + waypointEastWest + "E, " + waypointNorthSouth + "N");
+			//System.out.println();
 		}
 
-		System.out.println("Final coords: ");
+		System.out.println("\n\nFinal coords: ");
 		System.out.println("  N/S: " + shipNorthSouth);
 		System.out.println("  E/W: " + shipEastWest);	
 		int mDist = Math.abs(shipNorthSouth) + Math.abs(shipEastWest);

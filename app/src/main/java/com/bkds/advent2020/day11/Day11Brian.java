@@ -14,13 +14,13 @@ public class Day11Brian extends DayBase
 
   public Day11Brian()
   {
-    readData("day11", "mae");
+    readData("day11", "sample");
   }
 
   public boolean isEmpty(int row, int col, List<List<String>> model)
   {
     String seat = getSeat(row, col, model);
-    return seat == null || (seat.equals("L") || seat.equals("."));
+    return seat == null || ((seat.equals("L") || seat.equals(".")));
   }
 
   public boolean isOccupied(int row, int col, List<List<String>> model)
@@ -84,7 +84,7 @@ public class Day11Brian extends DayBase
   public boolean hasAdjacent(int row, int col, List<List<String>> model)
   {
     // Check row above
-    for (int c = (col - 1); c < col + 2; c++)
+    for (int c = (col - 1); c <= col + 1; c++)
     {
       String seat = getSeat(row - 1, c, model);
       if (seat != null && seat.equals("#"))
@@ -108,7 +108,7 @@ public class Day11Brian extends DayBase
     }
 
     // Check row below
-    for (int c = (col - 1); c < col + 2; c++)
+    for (int c = (col - 1); c <= col + 1; c++)
     {
       seat = getSeat(row + 1, c, model);
       if (seat != null && seat.equals("#"))
