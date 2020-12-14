@@ -110,15 +110,6 @@ public class Day13Brian extends DayBase {
 		long[] num = kv.values().stream().mapToLong(i -> i).toArray();
 		long[] rem = kv.keySet().stream().mapToLong(i -> kv.get(i)-i).toArray();
 
-//		int[] num = new int[3];
-//		int[] rem = new int[3];
-//		num[0] = 17;
-//		num[1] = 13;
-//		num[2] = 19;
-//		
-//		rem[0] = 0;
-//		rem[1] = 11;
-//		rem[2] = 16;
 		System.out.println("Result: " + computeMinX(rem, num));
 	}
 

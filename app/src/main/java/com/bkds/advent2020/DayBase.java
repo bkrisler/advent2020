@@ -20,6 +20,10 @@ public abstract class DayBase {
 		System.out.println(arg);
 	}
 
+	public static void print(Integer arg) {
+		System.out.println(arg);
+	}
+
 	protected void readData(String day, String person) {
 		System.out.println("Reading in data for: " + person + " and " + day);
 		InputStream is = this.getFileAsResource("data/" + day + "_" + person + ".txt");

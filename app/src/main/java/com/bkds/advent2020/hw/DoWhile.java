@@ -37,16 +37,44 @@ public class DoWhile {
 		int n = 0;
 		Scanner stdin = new Scanner(System.in);
 		String input = stdin.next();
+		String previous = "";
 		while(!input.equals("xxx")) { 
-			System.out.println("Input: " + input);
+			System.out.println("Input: " + input + " Previous: " + previous);
+			n++;
+			previous = input;
+			input = stdin.next();
 		}
 		stdin.close();
 		System.out.println("Count = " + n);
 	}
 
+	public void nextTest() {
+		int counter = 0;
+		boolean done = false;	
+		boolean isRepeating = true;
+		Scanner input = new Scanner(System.in);
+		String prev = input.next();		
+		while(!done) {			
+			String pos = input.next();
+			//System.out.println("Compare: " + prev + " with " + pos);
+			if(!pos.equals(prev) && !isRepeating) {
+				counter++;
+				isRepeating = false;
+			} else {
+				isRepeating = true;
+			}
+			if(pos.equals("x")) {
+				done = true;
+			}
+			prev = pos;
+		}
+		input.close();
+		System.out.println("Counter = " + counter);
+	}
+	
 	public static void main(String[] args) {
 		DoWhile w = new DoWhile();
-		//w.tst1();
-		System.out.println(111 % 100);
+		w.nextTest();
+		//System.out.println(111 % 100);
 	}
 }
