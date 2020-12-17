@@ -8,7 +8,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.IntSummaryStatistics;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +21,7 @@ public class Day16Brian extends DayBase {
 	private Map<String, List<Range>> notes = new HashMap<>();
 
 	public Day16Brian() {
-		readTicketData("day16", "sample2");
+		readTicketData("day16", "brian");
 	}
 
 	@Override
@@ -218,16 +217,18 @@ public class Day16Brian extends DayBase {
 		Map<Integer, List<String>> colNotHappening = new HashMap<>();
 		
 		for (int i = 0; i < columns.size(); i++) {
-			IntSummaryStatistics intSummaryStatistics = new IntSummaryStatistics();
-			columns.get(i).stream().mapToInt(Integer::intValue).forEach(intSummaryStatistics);
+//			IntSummaryStatistics intSummaryStatistics = new IntSummaryStatistics();
+//			columns.get(i).stream().mapToInt(Integer::intValue).forEach(intSummaryStatistics);
 			colNotHappening.put(i, noMatches(columns.get(i)));
 		}
 
+		Map<Integer, List<String>> flipped = flip(colNotHappening);
+		
 		Map<Integer, String> finalMapping = new HashMap<>();
 		
 		boolean done = false;
 		while(!done) {
-			Iterator<Map.Entry<Integer, List<String>>> iter = colNotHappening.entrySet().iterator();
+			Iterator<Map.Entry<Integer, List<String>>> iter = flipped.entrySet().iterator();
 			while (iter.hasNext()) {
 				Map.Entry<Integer, List<String>> entry = iter.next();
 				if(entry.getValue().size() == 0) {
@@ -236,12 +237,12 @@ public class Day16Brian extends DayBase {
 					String value = entry.getValue().get(0);
 					finalMapping.put(entry.getKey(), value);
 					iter.remove();
-					recalibrate(colNotHappening, value);
+					recalibrate(flipped, value);
 					break;					
 				}
 			}
 			
-			if(colNotHappening.size() == 0) {
+			if(flipped.size() == 0) {
 				done = true;
 			}			
 		}		
@@ -263,6 +264,19 @@ public class Day16Brian extends DayBase {
 //			}
 		}
 		System.out.println("Result: " + result);
+	}
+
+	private Map<Integer, List<String>> flip(Map<Integer, List<String>> colNotHappening) {
+		Map<Integer, List<String>> result = new HashMap<Integer, List<String>>();
+		List<String> columns = new ArrayList<>(notes.keySet());
+		for(Integer key : colNotHappening.keySet()) {
+			columns = new ArrayList<>(notes.keySet());
+			List<String> vals = colNotHappening.get(key);
+			columns.removeAll(vals);
+			//System.out.println(key + " Before: " + vals + " After: " + columns);
+			result.put(key, columns);
+		}
+		return result;
 	}
 
 	private void recalibrate(Map<Integer, List<String>> colNotHappening, String value) {
