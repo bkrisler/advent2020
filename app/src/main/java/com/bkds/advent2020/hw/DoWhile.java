@@ -72,9 +72,17 @@ public class DoWhile {
 		System.out.println("Counter = " + counter);
 	}
 	
+	public void testSq(double area) {
+		if(area > 0) {
+			System.out.println(Math.sqrt(area));
+		} else {
+			System.out.println("invalid");
+		}
+	}
 	public static void main(String[] args) {
 		DoWhile w = new DoWhile();
-		w.nextTest();
+		w.testSq(-5);
+		//w.nextTest();
 		//System.out.println(111 % 100);
 	}
 }
